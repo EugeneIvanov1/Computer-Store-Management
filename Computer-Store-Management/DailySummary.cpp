@@ -1,59 +1,67 @@
-// Function to display Daily Summary
-// Time Complexity - O(n^2)
-void computerType ::daily_summary()
-{
-    int i, num;
-    string str = "\t\t===========================================\n";
+#include <iostream>
+#include <vector>
+using namespace std;
 
-    system("cls");
-    node *temp;
+class ComputerType {
+public:
+    void daily_summary();
 
-    temp = start_ptr;
+private:
+    struct Node {
+        int receipt_number;
+        string customerName;
+        string date;
+        vector<string> type;
+        vector<string> computerName;
+        vector<int> quantity;
+        vector<int> amount;
+        int total = 0;
+        Node* next = nullptr;
+    };
+    Node* start_ptr = nullptr;
+};
 
-    if (temp == NULL) // Invalid receipt code
-    {
-        cout << endl << str;
+void ComputerType::daily_summary() {
+    const string separator = "\t\t===========================================\n";
+    Node* temp = start_ptr;
+
+    if (temp == nullptr) {
+        cout << endl << separator;
         cout << "\t\t\tThere is no Order to show!!!\n\t\t\tThe List is Empty\n";
-        cout << str << endl;
+        cout << separator << endl;
+        return;
     }
 
-    else
-    {
-        cout << "\n";
-        cout << "================================================================================================" << endl;
-        cout << " \t\t\tHere is the Daily Summary of All Orders \n"; //print all receipt
-        cout << "================================================================================================\n"
-             << endl;
+    cout << "\n";
+    cout << "================================================================================================" << endl;
+    cout << " \t\t\tHere is the Daily Summary of All Orders \n";
+    cout << "================================================================================================\n" << endl;
 
-        while (temp != NULL)
-        {
+    while (temp != nullptr) {
+        cout << "Receipt Number : " << temp->receipt_number << endl;
+        cout << "Customer Name  : " << temp->customerName << endl;
+        cout << "Order Date     : " << temp->date << "\n" << endl;
 
-            cout << "Receipt Number : " << temp->receipt_number << endl;
-            cout << "Customer Name  : " << temp->customerName << endl;
-            cout << "Order Date     : " << temp->date << endl
-                 << endl;
+        cout << "+===================+==============================+====================+=======================+" << endl;
+        cout << "|   Computer Type   |         Computer Name        |      Quantity      |     Total Price (Rs.) |" << endl;
+        cout << "+===================+==============================+====================+=======================+" << endl;
 
-            cout << "+===================+==============================+====================+=======================+" << endl;
-            cout << "|   Computer Type   |         Computer Name        |      Quantity      |     Total Price (Rs.) |" << endl;
-            cout << "+===================+==============================+====================+=======================+" << endl;
-
-            for (i = 0; i < temp->x; i++)
-            {
-                cout << "\t" << temp->type[temp->menu2[i] - 1] << "  \t\t";
-                cout << " " << temp->computerName[temp->menu2[i] - 1] << "\t  ";
-                cout << "\t    " << temp->quantity[i] << "\t";
-                cout << "\t\t" << temp->amount[i] << ".00" << endl;
-                cout << "+-------------------+------------------------------+--------------------+-----------------------+" << endl;
-            }
-
-            temp->total = temp->amount[0] + temp->amount[1] + temp->amount[2] + temp->amount[3] + temp->amount[4] + temp->amount[5] + temp->amount[6] + temp->amount[7] + temp->amount[8] + temp->amount[9];
-            cout << "\nTotal Bill is : " << "Rs. " << temp->total << ".00/-\n";
-
-            cout << "\n=================================================================================================\n"
-                 << endl;
-
-            temp = temp->next;
+        for (size_t i = 0; i < temp->quantity.size(); i++) {
+            cout << "\t" << temp->type[temp->menu2[i] - 1] << "  \t\t"
+                 << " " << temp->computerName[temp->menu2[i] - 1] << "\t  "
+                 << "\t    " << temp->quantity[i] << "\t"
+                 << "\t\t" << temp->amount[i] << ".00" << endl;
+            cout << "+-------------------+------------------------------+--------------------+-----------------------+" << endl;
         }
-    }
 
-} // End daily summary
+        temp->total = 0;
+        for (int amount : temp->amount) {
+            temp->total += amount;
+        }
+        
+        cout << "\nTotal Bill is : Rs. " << temp->total << ".00/-\n";
+        cout << "\n=================================================================================================\n" << endl;
+
+        temp = temp->next;
+    }
+}
