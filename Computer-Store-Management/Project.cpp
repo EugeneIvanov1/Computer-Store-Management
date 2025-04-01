@@ -7,95 +7,63 @@
 #include "DailySummary.cpp"
 #include "Exit.cpp"
 
-int main() // main function
-{
-    // Create an object of class computerType
+#include <iostream>
+
+void displayMenu() {
+    std::cout << "\t\t==================================================\n";
+    std::cout << "\t\t\t Computer Store Management System \n";
+    std::cout << "\t\t==================================================\n\n";
+    std::cout << "\t\t---------------------------------------------------\n";
+    std::cout << "\t\t||\t1. Take New Computer Order \t\t ||\n";
+    std::cout << "\t\t||\t2. Delete Latest Order\t\t ||\n";
+    std::cout << "\t\t||\t3. Modify Order List \t\t ||\n";
+    std::cout << "\t\t||\t4. Print the Receipt \t\t ||\n";
+    std::cout << "\t\t||\t5. Daily Summary of Total Sale \t ||\n";
+    std::cout << "\t\t||\t6. Exit\t\t\t\t ||\n";
+    std::cout << "\t\t---------------------------------------------------\n";
+}
+
+int main() {
     computerType computer;
+    int menu = 0;
+    
+    do {
+        displayMenu();
+        std::cout << "\nEnter Choice: ";
+        std::cin >> menu;
 
-    int menu;
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a number between 1 and 6.\n";
+            continue;
+        }
 
-    do
-    {
-        system("cls");
-
-        cout << "\t\t==================================================\n";
-        cout << "\t\t\t Computer Store Management System \n";
-        cout << "\t\t==================================================\n\n";
-        cout << "\t\t---------------------------------------------------\n";
-        cout << "\t\t||\t1. Take New Computer Order \t\t ||\n";
-        cout << "\t\t||\t2. Delete Latest Order\t\t\t ||\n";
-        cout << "\t\t||\t3. Modify Order List \t\t\t ||\n";
-        cout << "\t\t||\t4. Print the Receipt                  \t ||\n";
-        cout << "\t\t||\t5. Daily Summary of Total Sale \t\t ||\n";
-        cout << "\t\t||\t6. Exit\t\t\t\t\t ||\n";
-        cout << "\t\t---------------------------------------------------\n";
-
-        cout << "\nEnter Choice: ";
-        cin >> menu;
-
-        switch (menu)
-        {
-        case 1:
-        {
-            computer.take_order(); // Function add
-            break;
-        } // End case 1
-
-        case 2:
-        {
-            computer.delete_order(); // Function delete
-            system("PAUSE");
-            break;
-        } // End case 2
-
-        case 3:
-        {
-            computer.modify(); // Function modify
-            system("PAUSE");
-            break;
-        } // End case 3
-
-        case 4:
-        {
-            computer.order_list(); // Function order
-            system("PAUSE");
-            break;
-        } // End case 4
-        case 5:
-        {
-            computer.daily_summary(); // Function daily_summary
-            system("PAUSE");
-            break;
-        } // End case 5
-
-        case 6:
-        {
-            computer.exit(); // Function exit
-            goto a;
-            break;
-        } // End case 6
-
-        default:
-        {
-            cout << "Invalid input\nPlease re-enter the input\n"
-                 << endl;
-        } // End default
-
-        } // End Switch
-
-    } while (menu != 6); // End do
-
-a: // goto
-
-    cout << "\t\t===========================\n";
-    cout << "\t\t\tThank You!!!\n";
-    cout << "\t\t===========================\n\n";
-
-    system("PAUSE");
+        switch (menu) {
+            case 1:
+                computer.take_order();
+                break;
+            case 2:
+                computer.delete_order();
+                break;
+            case 3:
+                computer.modify();
+                break;
+            case 4:
+                computer.order_list();
+                break;
+            case 5:
+                computer.daily_summary();
+                break;
+            case 6:
+                std::cout << "\t\t===========================\n";
+                std::cout << "\t\t\tThank You!!!\n";
+                std::cout << "\t\t===========================\n\n";
+                break;
+            default:
+                std::cout << "Invalid input. Please enter a number between 1 and 6.\n";
+        }
+    } while (menu != 6);
 
     return 0;
-
-} // End main function
-
-
-////////////////////////////END OF THE PROGRAM//////////////////////////////////////////
+}
