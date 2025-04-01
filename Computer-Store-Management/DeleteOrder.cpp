@@ -1,84 +1,80 @@
-// Function to delete order
-// Time Complexity - O(n)
-void computerType ::delete_order()
-{
+#include <iostream>
+#include <memory>
+
+using namespace std;
+
+class ComputerType {
+private:
+    struct Node {
+        int receipt_number;
+        unique_ptr<Node> next;
+    };
+    
+    unique_ptr<Node> start_ptr;
+    Node* last = nullptr;
+    int count = 0;
+
+public:
+    void delete_order();
+};
+
+void ComputerType::delete_order() {
     system("cls");
+    const string separator = "\t===========================================\n";
 
-    string str = "\t===========================================\n";
-
-    if (start_ptr == NULL)
-    {
-        cout << endl;
-        cout << str;
-        cerr << "\t     Can not delete from an Empty List\n";
-        cout << str;
-        cout << endl;
+    if (!start_ptr) {
+        cerr << endl << separator;
+        cerr << "\t     Cannot delete from an empty list\n";
+        cerr << separator << endl;
+        return;
     }
 
-    else
-    {
-        int i, num, count;
-        cout << "\nEnter the receipt numnber you want to delete: ";
-        cin >> num;
-        node *q;
-        node *temp;
-        bool found = false;
-
-        if (start_ptr->receipt_number == num)
-        {
-            q = start_ptr;
-            start_ptr = start_ptr->next;
-
-            count--;
-
-            if (start_ptr == NULL)
-                last = NULL;
-
-            delete q;
-
-            cout << "\n\t\t========================================\n";
-            cout << "\t\t The Receipt is Deleted Successfully!!!" << endl;
-            cout << "\t\t========================================\n\n";
-        }
-
-        else
-        {
-            temp = start_ptr;
-            q = start_ptr->next;
-
-            while ((!found) && (q != NULL))
-            {
-                if (q->receipt_number != num)
-                {
-                    temp = q;
-                    q = q->next;
-                }
-
-                else
-                    found = true;
-            }
-
-            if (found)
-            {
-                temp->next = q->next;
-                count--;
-
-                if (last == q)
-                    last = temp;
-                delete q;
-
-                cout << "\n\t\t========================================\n";
-                cout << "\t\t The Receipt is Deleted Successfully!!!" << endl;
-                cout << "\t\t========================================\n\n";
-            }
-
-            else
-            {
-                cout << "\n\t\t==========================================\n";
-                cout << "\t\t Item to be deleted is not in the list!!!" << endl;
-                cout << "\t\t==========================================\n\n";
-            }
-        }
+    int num;
+    cout << "\nEnter the receipt number you want to delete: ";
+    cin >> num;
+    
+    if (!cin) {
+        cerr << "Invalid input. Please enter a valid number." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return;
     }
 
-} // End function delete_order
+    if (start_ptr->receipt_number == num) {
+        start_ptr = move(start_ptr->next);
+        count--;
+        if (!start_ptr) {
+            last = nullptr;
+        }
+
+        cout << "\n\t\t========================================\n";
+        cout << "\t\t The Receipt is Deleted Successfully!!!\n";
+        cout << "\t\t========================================\n\n";
+        return;
+    }
+
+    Node* temp = start_ptr.get();
+    Node* prev = nullptr;
+    
+    while (temp->next && temp->next->receipt_number != num) {
+        prev = temp;
+        temp = temp->next.get();
+    }
+    
+    if (temp->next) {
+        unique_ptr<Node> to_delete = move(temp->next);
+        temp->next = move(to_delete->next);
+        count--;
+        if (!temp->next) {
+            last = temp;
+        }
+
+        cout << "\n\t\t========================================\n";
+        cout << "\t\t The Receipt is Deleted Successfully!!!\n";
+        cout << "\t\t========================================\n\n";
+    } else {
+        cout << "\n\t\t==========================================\n";
+        cout << "\t\t Item to be deleted is not in the list!!!\n";
+        cout << "\t\t==========================================\n\n";
+    }
+}
